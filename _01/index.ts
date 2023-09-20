@@ -15,12 +15,12 @@ function testScope(name: string = "Fulano", id: number = 0) {
 testScope();
 
 
-function greet(person: string, date: Date) {
+function greet1(person: string, date: Date) {
   console.log(`Hello ${person}, today is ${date.toDateString()}!`);
 }
  
 // greet("Maddison", Date()); -- This returns an error, because Date() returns a string, but new Date() returns what we're expecting:
-greet("Guilherme", new Date());
+greet1("Guilherme", new Date());
 
 
 //More than one type of value in a variable (union type):
