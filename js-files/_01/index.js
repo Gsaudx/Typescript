@@ -1,4 +1,8 @@
+"use strict";
 console.log("Hello World!");
+//By default, Typescript compiles the .ts code to an old JS version, the ES3 (Ecma Script 3), however, we can specify to compile our code to a newer version using:
+//tsc --target es2015 fileName.ts
+//This will compile our code to a newer version of JavaScript. 
 //Type notation - person: string
 //Type notation is the ability to indicate to typescript what value we're expecting something to receive (a function, a variable, an object etc).
 //Note: We don't always need to write explicit type notation, as typescript can infer the types automatically.
