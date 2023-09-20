@@ -21,3 +21,16 @@ let birthYear: string | number;
 
     - tsc index.ts -w
  */
+
+//For example, this function takes either a string or an array
+function getLength(obj: string | string[]) {
+        return obj.length;
+    }
+
+//And we can also return values depending on whether it's passed as arguments
+function wrapInArray(obj: string | string[]) {
+    if (typeof obj === "string") {
+      return [obj];
+    }
+    return obj;
+  }
