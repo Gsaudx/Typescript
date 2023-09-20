@@ -1,8 +1,26 @@
+console.log("Hello World!");
+
+//By default, Typescript compiles the .ts code to an old JS version, the ES3 (Ecma Script 3), however, we can specify to compile our code to a newer version using:
+//tsc --target es2015 fileName.ts
+//This will compile our code to a newer version of JavaScript. 
+
+
+//Type notation - person: string
+//Type notation is the ability to indicate to typescript what value we're expecting something to receive (a function, a variable, an object etc).
+//Note: We don't always need to write explicit type notation, as typescript can infer the types automatically.
 function testScope(name: string = "Fulano", id: number = 0) {
     console.log("This user name is " + name + " and its ID is: " + id);
 }
 
 testScope();
+
+
+function greet(person: string, date: Date) {
+  console.log(`Hello ${person}, today is ${date.toDateString()}!`);
+}
+ 
+// greet("Maddison", Date()); -- This returns an error, because Date() returns a string, but new Date() returns what we're expecting:
+greet("Guilherme", new Date());
 
 
 //More than one type of value in a variable (union type):
@@ -34,3 +52,4 @@ function wrapInArray(obj: string | string[]) {
     }
     return obj;
   }
+
