@@ -108,8 +108,227 @@ printCoord({ x: 3, y: 7 });
  * To do this, add a ? after the property name:
  */
 function printName(obj: { first: string; last?: string }) {
-  console.log(obj.last?.toUpperCase());
+  console.log(obj.last?.toUpperCase()); //Without the question mark (?) TS wouuld return an error, because .last might be undefined
 }
 // Both OK
 printName({ first: "Bob" });
+
+
+
+
+
+/**
+ * UNION TYPES
+ * The first way to combine types you might see is a union type. 
+ * A union type is a type formed from two or more other types, representing values that may be any one of those types. 
+ * We refer to each of these types as the union’s members.
+ */
+function printId(id: number | string) {
+  console.log("Your ID is: " + id);
+}
+// OK
+printId(101);
+// OK
+printId("202");
+
+/**
+ * TypeScript will only allow an operation if it is valid for every member of the union. 
+ * For example, if you have the union string | number, you can’t use methods that are only available on string:
+      function printId(id: number | string) {
+        console.log(id.toUpperCase()); ---> Error
+      }
+
+ * The solution is to narrow the union with code. Narrowing occurs when TypeSCript deduce a more specific 
+ * type for a value based on the structure of the code:
+ */
+function printId2(id: number | string) {
+  if (typeof id === "string") {
+    // In this branch, id is of type 'string'
+    console.log(id.toUpperCase());
+  } else {
+    // Here, id is of type 'number'
+    console.log(id);
+  }
+}
+
+//Another example using an Array type:
+function welcomePeople(x: string[] | string) {
+  if (Array.isArray(x)) {
+    // Here: 'x' is 'string[]'
+    console.log("Hello, " + x.join(" and "));
+  } else {
+    // Here: 'x' is 'string'
+    console.log("Welcome lone traveler " + x);
+  }
+}
+
+//But, sometimes we'll have an union where all the members have a property in commom
+//For example, both arrays and strings have the .slice() method.
+//If every member in an union has a property in common, you can use that property without narrowing:
+
+// Return type is inferred as number[] | string
+function getFirstThree(x: number[] | string) {
+  return x.slice(0, 3);
+}
+
+
+
+
+/**
+ * TYPE ALIASES
+ 
+ * Sometimes you want to use an object, for example, more than once and refer to it by a single name
+ * A type alias is exactly that a name for any type. The syntax for a type alias is:
+ */
+type Point = {
+  x: number;
+  y: number;
+};
+ 
+// Exactly the same as the earlier example
+function printCoordAlias(pt: Point) {
+  console.log("The coordinate's x value is " + pt.x);
+  console.log("The coordinate's y value is " + pt.y);
+}
+ 
+printCoord({ x: 100, y: 100 });
+
+//You can actually use a type alias to give a name to any type at all, not just an object type. For example, a type alias can name a union type:
+type ID = number | string;
+
+function printUserId(id: ID){
+  return id;
+}
+
+
+
+//INTERFACES **
+//An interface declaration is another way to name an object type:
+interface PointInterface {
+  x: number;
+  y: number;
+}
+ 
+function printCoordInterface(pt: PointInterface) {
+  console.log("The coordinate's x value is " + pt.x);
+  console.log("The coordinate's y value is " + pt.y);
+}
+ 
+printCoordInterface({ x: 100, y: 100 });
+
+//Differences Between Type Aliases and Interfaces
+/**
+ * Types: Can't be re-opened to add new properties 
+ * Interface: Can always be extended
+ */
+
+/**
+ * Extending an interface:
+    interface Animal {
+      name: string;
+    }
+
+    interface Bear extends Animal {
+      honey: boolean;
+    }
+
+    const bear = getBear();
+    bear.name;
+    bear.honey;
+ */
+
+/**
+ * Extending a type via inserctions
+    type Animal = {
+      name: string;
+    }
+
+    type Bear = Animal & { 
+      honey: boolean;
+    }
+
+    const bear = getBear();
+    bear.name;
+    bear.honey;
+ */
+
+
+
+
+  
+
+/**
+ * Type Assertions
+    - STUDY ABOUT THIS I DIDN'T UNDERSTAND READING THE TYPESCRIPT DOCS
+ */
+
+
+/**
+ * Literal types
+ * Literal types are self-intuitive, they refer to a literal and specific type, like normal constants.
+ * Constants can only refer to a specific type/value, and cannot be reasigned. 
+ * For example: const hello = "Hello World!" refers to "Hello World".
+ * A literal type can be written like this:
+ */
+let x: "hello" = "hello";
+// OK
+x = "hello";
+// ...
+//x = "howdy"; ---> Error, because the type of x is "hello", so its value can only be "hello"
+
+/**
+ * It’s not much use to have a variable that can only have one value!
+
+ * But by combining literals into unions, you can express a much more useful concept
+ * For example, functions that only accept a certain set of known values:
+ */
+function printText(s: string, alignment: "left" | "right" | "center") {
+  // ...
+}
+printText("Hello, world", "left");
+//printText("G'day, mate", "centre"); ---> Error
+
+/**
+ * Numeric literal types work the same way:
+ */
+function compare(a: string, b: string): -1 | 0 | 1 { //the function can only return -1, 0 or 1
+  return a === b ? 0 : a > b ? 1 : -1; 
+  //If A is strict equals to B, return 0
+  //If not, check if A is greater than B, if it's, then return 1
+  //If not, so, if A is less than B, return -1
+}
+
+/**
+ * Of course, you can combine these with non-literal types:
+ */
+interface Options {
+  width: number;
+}
+function configure(x: Options | "auto") {
+  // ...
+}
+configure({ width: 100 });
+configure("auto");
+//configure("automatic"); ---> Error
+
+
+
+
+/**
+ * Literal Inference
+ * When you initialize a variable with an object, TypeScript assumes 
+ * that the properties of that object might change values later. For example, if you wrote code like this:
+    const obj = { counter: 0 };
+    if (someCondition) {
+      obj.counter = 1;
+    }
+
+ * TypeScript doesn’t assume the assignment of 1 to a field which previously had 0 is an error. 
+ * Another way of saying this is that obj.counter must have the type number, not 0, because types are used to determine both reading and writing behavior. 
+ */
+
+
+/**
+ * Null and Undefined
+ */
 
