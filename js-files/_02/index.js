@@ -266,4 +266,23 @@ configure("auto");
  */
 /**
  * Null and Undefined
+ *
+ * When 'strictNullChecks' is off (always let it on), you can still access them normally.
+ * Butt, when this option is enable in tsconfig.json, TypeScript will prevent you from usign both of them.
+ * With strictNullChecks on, when a value is null or undefined, you will need to test for those values before using methods or properties on that value.
+ * Just like checking for undefined before using an optional property, we can use narrowing to check for values that might be null:
  */
+function doSomething(x) {
+    if (x === null) {
+        // do nothing
+    }
+    else {
+        console.log("Hello, " + x.toUpperCase());
+    }
+}
+//Or we can use the exclamattion mark just after a variable. That's a TypeScript operator which checks wether the value isn't null or undefined:
+//Usage is similar to the question mark operator (not mandatory parameter)
+function liveDangerously(x) {
+    // No error
+    console.log(x.toFixed()); //Will only console.log(x.toFixed()) if x ain't null or undefined
+}
