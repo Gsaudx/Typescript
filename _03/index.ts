@@ -52,3 +52,44 @@ function printAll(strs: string | string[] | null) {
  * That's because null is also an object in JavaScript
  * In this case, when we use typeof strs === "object", TypeScript narrowed strs down to string[] | null, as both are objects in JS.
  */
+
+
+/**
+ * TRUTHINESS NARROWING
+ * As we know, in JS, values like: null, undefined, '', 0, NaN and 0n are coerced to false. That's truthiness, briefly.
+ * So, we can use that in our advantage:
+ */
+function printAll(strs: string | string[] | null) {
+  if (strs && typeof strs === "object") { //Checking if strs is true (in this case, not null) and is also an object. In other words, if it's an array and it's not null.
+    for (const s of strs) {
+      console.log(s);
+    }
+  } else if (typeof strs === "string") {
+    console.log(strs);
+  }
+}
+
+/**
+ * But wrapping the code like this, for example, would be an error, because we're no longer handling the empty string check:
+
+function printAll(strs: string | string[] | null) {
+  // !!!!!!!!!!!!!!!!
+  //  DON'T DO THIS!
+  //   KEEP READING
+  // !!!!!!!!!!!!!!!!
+  if (strs) {
+    if (typeof strs === "object") {
+      for (const s of strs) {
+        console.log(s);
+      }
+    } else if (typeof strs === "string") {
+      console.log(strs);
+    }
+  }
+} 
+ */
+
+
+/**
+ * EQUALITY NARROWING
+ */
