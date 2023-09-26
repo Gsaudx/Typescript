@@ -108,7 +108,7 @@ printCoord({ x: 3, y: 7 });
  * To do this, add a ? after the property name:
  */
 function printName(obj: { first: string; last?: string }) {
-  console.log(obj.last?.toUpperCase()); //Without the question mark (?) TS wouuld return an error, because .last might be undefined
+  console.log(obj.last?.toUpperCase()); //Without the question mark (?) TS would return an error, because .last might be undefined
 }
 // Both OK
 printName({ first: "Bob" });
